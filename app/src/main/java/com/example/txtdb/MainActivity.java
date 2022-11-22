@@ -10,6 +10,7 @@ import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.txtdb.workers.DbHelper;
@@ -21,12 +22,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
     Button DirChooserBtn;
     TextView textView;
+    EditText editText;
     DbHelper dbHelper = new DbHelper(this);
 
     @Override
@@ -36,6 +39,36 @@ public class MainActivity extends AppCompatActivity {
 
         DirChooserBtn = findViewById(R.id.DirChooserBtn);
         textView = findViewById(R.id.textId);
+        editText = findViewById(R.id.simpleEditText);
+
+        DirChooserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cursor cursor_2 = null;
+                cursor_2 = dbHelper.getReadableDatabase().rawQuery(String.valueOf(editText.getText()), null);
+                System.out.println(editText.getText());
+                textView.setText("");
+                if (cursor_2.getCount() > 0) {
+                    cursor_2.moveToFirst();
+                    List<String> columns = Arrays.asList(cursor_2.getColumnNames());
+                    textView.append("Columns : " + columns + "\n");
+                    List<String> tmpRecord = new ArrayList<>();
+                    do {
+                        tmpRecord.clear();
+                        for (String col : columns) {
+                            try {
+                                tmpRecord.add(cursor_2.getString(cursor_2.getColumnIndexOrThrow(col)));
+                            } catch (Exception e) {
+                                textView.setText(e.getMessage());
+                            }
+                        }
+                        textView.append(tmpRecord + "\n");
+                    } while (cursor_2.moveToNext());
+                }else{
+                    textView.setText("No Data");
+                }
+            }
+        });
 
         //init tables from files
         File tablesPath = new File("/data/data/com.example.txtdb/txt_db");
@@ -57,11 +90,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //reade data from sqlite
-
+        List<String> tablesNameList = new ArrayList<>();
         for (parserAddaptor table: tables) {
+            tablesNameList.add(table.tableName);
             List<List<String>> recordsList = new ArrayList<>(new ArrayList<>());
             List<String> columns = null;
-            Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM " + table.tableName, null);
+            Cursor cursor = null;
+            if(table.tableName == "Users"){
+                cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM " + table.tableName + "WHERE age <= 13", null);
+            }else {
+                cursor = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM " + table.tableName, null);
+            }
             cursor.moveToFirst();
             do {
                 columns = Arrays.asList(cursor.getColumnNames());
@@ -76,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.append(record + "\n");
             }
         }
+        textView.append("\nTables:" + tablesNameList);
 
 
 

@@ -6,30 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-    <Button
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:text="Chose Directory"
-        android:id="@+id/DirChooserBtn"
-    />
-
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/textId"
         />
+
+        <Button
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Make Custom Request"
+            android:id="@+id/DirChooserBtn"
+        />
+
+        <EditText
+            android:id="@+id/simpleEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:text="Please Ebter"
+            android:gravity="2"
+        />
+
 
     </LinearLayout>
 

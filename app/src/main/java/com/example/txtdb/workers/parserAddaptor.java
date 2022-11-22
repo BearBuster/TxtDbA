@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 public class parserAddaptor {
     public String tableName;
-    Map<String, List<String>> columnsMap = new HashMap<String, List<String>>();
+    Map<String, List<String>> columnsMap = new LinkedHashMap<String, List<String>>();
     List<List<String>> recordsList = new ArrayList<>(new ArrayList<>());
 
     @Override
